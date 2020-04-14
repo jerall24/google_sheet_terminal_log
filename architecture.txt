@@ -1,0 +1,11 @@
+Vision:
+Type in commands that will connect to a Google Sheet and run specific actions based on the commands
+
+type in:
+$ gl new <project_name> <note/comment> -- new row at the top of the document
+$ gl new <note/comment> -- new row at the top of the document with same project as previous
+$ gl last -- get last log
+$ gl last <project_name> -- get last log of that project
+$ gl del -- delete last log
+$ gl del <project_name> -- delete last log of that project
+$ gl del <log_id> -- delete specific log
