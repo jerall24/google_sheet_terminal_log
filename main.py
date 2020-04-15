@@ -13,7 +13,11 @@ import pickle
 # - Configure reading of terminal arguments to account for varying number of arguments
 # - Will need to use the Drive API (link in architecture) to get Sheet IDs and manage the drive on a file-basis. Not MVP
 # - Get list of all projects
-#
+# - Confirmation of command being completed
+# - log_id or search
+# - list out last ## of logs, last ## of logs for a specific project
+# - Consideration: Implement SQL in this to create a database of these so I can run SQL on them or just add to google sheets?
+# - Limit combination of flags (p and l can't be used together)
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -27,6 +31,8 @@ MAIN_SHEET = 'Sheet1!'
 ACTIVE_COLUMNS = 'A:C'
 FIRST_COL = 'A'
 LAST_COL = 'C'
+#default sheet is 0
+SHEET_ID = 0
 SHEET_RANGE = MAIN_SHEET+ACTIVE_COLUMNS
 
 # args comes in as a list of arguments
@@ -55,6 +61,9 @@ def function_calls(args):
     elif(func == "help"):
         print("There are 3 current commands: new, last, and del")
         print("If you want to specify a project add the flag -p after the command")
+        print("When the delete function is implemented, add the flag -l after del and specify the log_id to delete that log")
+        print("Don't use more than one flag for now")
+        print("project names shouldn't include spaces")
         print("implementation for them and this help is currently being worked on")
     else:
         print(func + " action not supported yet")
@@ -147,7 +156,7 @@ def appendNewLog(sheet, flag, project, message):
               # Union field area can be only one of the following:
               "start": {
                 # object (GridCoordinate)
-                "sheetId" : 0,
+                "sheetId" : SHEET_ID,
                 "rowIndex" : 1,
                 "columnIndex" : 0
               },
@@ -185,11 +194,38 @@ def deleteLog():
 
 # Need a robust method of getting the arguments that are being passed
 # through the terminal command - using flags
+# Command - new, last, del, list (to be implemented)
+# Flag - p, l
+# Identifier - Either project_name or log_id
+# Message - the message
 def decipherArgs():
-    # [command, flags, [project, log], message]
-    return sys.argv
+    it = iter(sys.argv)
+    next(it)
+    command = next(it)
+    # Now at the 3rd argument
+    current = next(it)
+    if current[0] == '-':
+        #we have a flag on the play
+        flags = list(current[1:])
+        # have to account when we do -lp or -pl
+        # but also can't do a combo of p and l
+    elif current is None:
+        # Either go last or go del
+        flags = identifier = message = None
+    else:
+        # No flag so we either have a log message or nothing afterwards
+        # Currently only command will be go new <message>
+        flags = identifier = None
+        message = " ".join(it)
+    # At this point everything is using a flag
+    # The next argument will always be a project_name or log_id
+    identifier = next(it)
+    message = " ".join(it)
+    # [command, [flags], identifier, message]
+    return [command, flags, identifier, message]
 
 if __name__ == '__main__':
     # print('Number of arguments:', len(sys.argv), 'arguments.')
     # print('Argument List:', str(sys.argv))
-    function_calls(decipherArgs())
+    # function_calls(decipherArgs())
+    print(decipherArgs())
