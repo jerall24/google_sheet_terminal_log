@@ -1,11 +1,24 @@
 Vision:
 Type in commands that will connect to a Google Sheet and run specific actions based on the commands
 
-type in:
-$ gl new <project_name> <note/comment> -- new row at the top of the document
-$ gl new <note/comment> -- new row at the top of the document with same project as previous
-$ gl last -- get last log
-$ gl last <project_name> -- get last log of that project
-$ gl del -- delete last log
-$ gl del <project_name> -- delete last log of that project
-$ gl del <log_id> -- delete specific log
+Action word: go
+Actions:  new - append a new log to the document
+          last - get the last log that was pushed to the document
+          del - delete the specified log
+
+Terminal:
+$ go new <project_name> <note/comment> -- new row at the top of the document
+$ go new <note/comment> -- new row at the top of the document with same project as previous
+$ go last -- get last log
+$ go last <project_name> -- get last log of that project
+$ go del -- delete last log
+$ go del <project_name> -- delete last log of that project
+$ go del <log_id> -- delete specific log
+
+Drive:
+https://developers.google.com/drive/api/v3/reference
+https://developers.google.com/drive/api/v3/reference/files#resource-representations
+
+Sheets:
+
+Credentials:
