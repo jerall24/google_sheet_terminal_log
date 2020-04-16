@@ -1,7 +1,7 @@
 # Google Sheet Log
 
 ## Name
-go - keyword to run program
+go - logger
 
 ## Synopsis
 ```
