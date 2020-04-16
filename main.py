@@ -125,9 +125,6 @@ def appendNewLog(sheet, flags, project, message):
           }
         })
     requests.append({
-        # "majorDimension": "ROWS",
-        # "range": "Sheet1!A2:C2",
-        # "values": [[datetime.today().strftime("%m/%d/%Y %H:%M:%S"),getLastLog(sheet, None)[1],message]]
         "updateCells": {
         # https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/request#UpdateCellsRequest
             "rows" : [
@@ -172,12 +169,6 @@ def appendNewLog(sheet, flags, project, message):
         "requests" : requests
     }
     sheet.batchUpdate(spreadsheetId=SPREADSHEET_ID,body=body).execute()
-    # append_req = {
-    #     "majorDimension": "ROWS",
-    #     "range": "Sheet1!A2:C2",
-    #     "values": [[datetime.today().strftime("%m/%d/%Y %H:%M:%S"),getLastLog(sheet, None)[1],message]]
-    # }
-    # result = sheet.values().append(spreadsheetId=SPREADSHEET_ID, range='Sheet1!A2:C2', insertDataOption="INSERT_ROWS",valueInputOption="USER_ENTERED",body=append_req).execute()
     return 0
 
 # Helper function to get the first line after the headers
