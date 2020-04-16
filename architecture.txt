@@ -7,13 +7,14 @@ Actions:  new - append a new log to the document
           del - delete the specified log
 
 Terminal:
-$ go new <project_name> <note/comment> -- new row at the top of the document
+$ go new -p <project_name> <note/comment> -- new row at the top of the document
 $ go new <note/comment> -- new row at the top of the document with same project as previous
 $ go last -- get last log
-$ go last <project_name> -- get last log of that project
+$ go last -p <project_name> -- get last log of that project
 $ go del -- delete last log
-$ go del <project_name> -- delete last log of that project
-$ go del <log_id> -- delete specific log
+$ go del -p <project_name> -- delete last log of that project
+$ go del -l <log_id> -- delete specific log
+$ go del -A <project_name> -- delete entire project (give confirmation)
 
 Drive:
 https://developers.google.com/drive/api/v3/reference

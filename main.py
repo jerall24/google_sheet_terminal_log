@@ -18,6 +18,7 @@ import pickle
 # - list out last ## of logs, last ## of logs for a specific project
 # - Consideration: Implement SQL in this to create a database of these so I can run SQL on them or just add to google sheets?
 # - Limit combination of flags (p and l can't be used together)
+# - If flag is designated but the first word in the message is a project then make that the project and use the rest of the message.
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
