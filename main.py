@@ -37,23 +37,22 @@ SHEET_RANGE = MAIN_SHEET+ACTIVE_COLUMNS
 
 # args comes in as a list of arguments
 def function_calls(args):
+    # args = [command, flags[], identifier, message]
+    print(args)
     sheet = get_sheet(creds())
     # For testing always use the following command line code
     # gotest = go new "This is my comment"
-    func = args[1]
-    # when we get more robust argument reading uncomment this
-    # project = args[2]
-    message = " ".join(args[2:])
-    flag = None
-    project = None
+    func = args[0]
+    flags = args[1]
+    identifier = args[2]
+    message = args[3]
     if(func == "new"):
-        #use helper function for each command
-        appendNewLog(sheet, flag, project, message)
-
+        # Use helper function for each command
+        appendNewLog(sheet, flags, identifier, message)
         print("\"" + func + "\" feature is currently being worked on")
     elif(func == "last"):
         print("\"" + func + "\" action not completely implemented yet")
-        print(getLastLog(sheet, None))
+        print(getLastLog(sheet, flags, identifier))
         print("prioritize last > last project_name")
     elif(func == "del"):
         print("\"" + func + "\" action not yet implemented")
@@ -107,9 +106,11 @@ def get_sheet(creds):
     # else return sheet id
     # all else fails default to regular sheet
 
-def appendNewLog(sheet, flag, project, message):
-    if flag != "-p":
-        project = getLastLog(sheet, None)
+def appendNewLog(sheet, flags, project, message):
+    message = "No message logged" if message is None else message
+    if (flags is None) or ("p" in flags and project is None) or ("p" not in flags):
+        project = getLastLog(sheet, None, None)[1]
+    # print(project)
     requests = []
     requests.append(
         {
@@ -180,13 +181,14 @@ def appendNewLog(sheet, flag, project, message):
 
 # Helper function to get the first line after the headers
 # If project is none then we'll get the most recent log
-def getLastLog(sheet, project):
-    if(project is None):
+def getLastLog(sheet, flags, project):
+    if(flags is None):
         result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
                                     range=MAIN_SHEET+FIRST_COL+"2:"+LAST_COL+"2").execute()
+        # return a list of 3 items [time, project, message]
         return result.get('values', [])[0]
     else:
-        return ["there's", "nothing", "here"]
+        return ["time", "project", "message"]
 
 def deleteLog():
     #https://developers.google.com/sheets/api/guides/batchupdate#example
@@ -203,7 +205,10 @@ def decipherArgs():
     next(it)
     command = next(it)
     # Now at the 3rd argument
-    current = next(it)
+    try:
+        current = next(it)
+    except:
+        return [command, None, None, None]
     if current[0] == '-':
         #we have a flag on the play
         flags = list(current[1:])
@@ -212,20 +217,22 @@ def decipherArgs():
     elif current is None:
         # Either go last or go del
         flags = identifier = message = None
+        return [command, flags, identifier, message]
     else:
         # No flag so we either have a log message or nothing afterwards
         # Currently only command will be go new <message>
         flags = identifier = None
-        message = " ".join(it)
+        message = current + " " + " ".join(it)
+        return [command, flags, identifier, message]
     # At this point everything is using a flag
     # The next argument will always be a project_name or log_id
     identifier = next(it)
     message = " ".join(it)
-    # [command, [flags], identifier, message]
+    # [command, flags[], identifier, message]
     return [command, flags, identifier, message]
 
 if __name__ == '__main__':
     # print('Number of arguments:', len(sys.argv), 'arguments.')
     # print('Argument List:', str(sys.argv))
-    # function_calls(decipherArgs())
-    print(decipherArgs())
+    function_calls(decipherArgs())
+    # print(decipherArgs())
