@@ -16,11 +16,17 @@ Current version tracks date, time, project, and message.
 
 ## Options
 
+**-l**
+Identify a specific log by log id
+
+**-n**
+Specify the number of logs
+
 **\-p**
 Identify is a specific project by project name
 
-**-l**
-Identify a specific log by log id
+
+
 
 
 ## Commands
@@ -37,9 +43,15 @@ Identify a specific log by log id
 - Delete the most recent log of a specified project using the **-p** option.
 - Delete the specific log using the **-l** option.
 
+**list** *(work in progress)*
+- Get a list of all logs of a project with the **-p** option.
+- Get a specific number of logs with the **-n** option. Can be used with **-p** option.
+
 
 ## Examples
+> Only commands that are fully integrated will appear here
 ```
 $ go new "This is my log message with quotes"
 $ go new This is also my log message without quotes
+$ go new -p readme_project "I'm writing to a the readme_project"
 ```
