@@ -11,10 +11,17 @@ $ go new -p <project_name> <note/comment> -- new row at the top of the document
 $ go new <note/comment> -- new row at the top of the document with same project as previous
 $ go last -- get last log
 $ go last -p <project_name> -- get last log of that project
+$ go last -n <number_of_logs> -- get last n logs
 $ go del -- delete last log
 $ go del -p <project_name> -- delete last log of that project
 $ go del -l <log_id> -- delete specific log
 $ go del -A <project_name> -- delete entire project (give confirmation)
+
+Keep thinking about this below. Do you need to restructure "last" command?
+$ go list -- List all messages of last project
+$ go list -p <project_name> -- List all messages of project_name
+$ go list -n <number_of_logs> -- list the last n logs of the last project
+$ go list -np <number_of_logs> <project_name> -- list n logs of a project
 
 Drive:
 https://developers.google.com/drive/api/v3/reference

@@ -159,10 +159,6 @@ def appendNewLog(sheet, flags, project, message):
                 "rowIndex" : 1,
                 "columnIndex" : 0
               },
-              # "range": {
-              #   object (GridRange)
-              # }
-              # End of list of possible types for union field area.
         }
     })
     body = {
@@ -174,13 +170,18 @@ def appendNewLog(sheet, flags, project, message):
 # Helper function to get the first line after the headers
 # If project is none then we'll get the most recent log
 def getLastLog(sheet, flags, project):
-    if(flags is None):
+    if flags is None:
         result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
                                     range=MAIN_SHEET+FIRST_COL+"2:"+LAST_COL+"2").execute()
         # return a list of 3 items [time, project, message]
         return result.get('values', [])[0]
     else:
-        return ["time", "project", "message"]
+        if project is None:
+            # recursive call to just get the last log
+            return getLastLog(sheet, None, None)
+        else:
+            # probably have to filter and then get
+            return def getLastLog(sheet, None, None)
 
 def deleteLog():
     #https://developers.google.com/sheets/api/guides/batchupdate#example
