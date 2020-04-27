@@ -181,7 +181,7 @@ def getLastLog(sheet, flags, project):
             return getLastLog(sheet, None, None)
         else:
             # probably have to filter and then get
-            return def getLastLog(sheet, None, None)
+            return getLastLog(sheet, None, None)
 
 def deleteLog():
     #https://developers.google.com/sheets/api/guides/batchupdate#example
