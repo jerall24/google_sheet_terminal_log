@@ -1,5 +1,5 @@
 from __future__ import print_function
-import os.path
+import os
 # from os import *
 from datetime import datetime
 import sys
@@ -9,7 +9,10 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import pickle
 
+
+
 # TODO:
+# - make all folder links relative
 # - Configure reading of terminal arguments to account for varying number of arguments
 # - Will need to use the Drive API (link in architecture) to get Sheet IDs and manage the drive on a file-basis. Not MVP
 # - Get list of all projects
@@ -22,10 +25,11 @@ import pickle
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 # Will need to get a function that'll get the sheet and range
 # This range will change for all of the functions though
-SPREADSHEET_ID = "1qVVlVO0-8jq4giRJCSQiwxsPa3sFRWk0nb392KAUYG4"
+SPREADSHEET_ID = os.getenv("SPREADSHEET_ID")
 
 # Metainformation for the sheet
 MAIN_SHEET = 'Sheet1!'
@@ -39,6 +43,7 @@ SHEET_RANGE = MAIN_SHEET+ACTIVE_COLUMNS
 # args comes in as a list of arguments
 def function_calls(args):
     # args = [command, flags[], identifier, message]
+    print("[command, [flags], identifier, message]")
     print(args)
     sheet = get_sheet(creds())
     # For testing always use the following command line code
@@ -77,8 +82,8 @@ def creds():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists(os.path.join(BASEDIR,'token.pickle')):
+        with open(os.path.join(BASEDIR,'token.pickle'), 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -86,10 +91,10 @@ def creds():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                '~/\"Google Drive\"/Projets/google_sheet_progress_log/credentials.json', SCOPES)
+                os.path.join(BASEDIR,'credentials.json'), SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open(os.path.join(BASEDIR,'token.pickle'), 'wb') as token:
             pickle.dump(creds, token)
 
     # uses Google discovery API
